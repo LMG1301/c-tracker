@@ -8,7 +8,7 @@ const V = {
   "shoulder-cars": YT("shoulder CARs"), "thread-needle": YT("thread the needle thoracic"), "cat-cow": YT("cat cow spinal"), "band-pull": YT("band pull apart jeff nippard"), "prone-swim": YT("prone swimmer lower trap"), "scap-pushup": YT("scapular push up"), "scorpion": YT("scorpion stretch"),
   "ankle-cars": YT("ankle CARs"), "tspine-rot": YT("thoracic rotation"), "kb-halo": YT("kettlebell halo"), "sl-bridge": YT("single leg glute bridge"),
   "broad-jump": YT("broad jump explosive phil daru"), "squat-pause": YT("pause back squat squat university"), "bss": YT("bulgarian split squat jeff nippard"), "sl-rdl": YT("single leg romanian deadlift"), "pallof": YT("pallof press phil daru"),
-  "plyo-push": YT("plyometric push up explosive"), "bench-pause": YT("pause bench press jeff nippard"), "pullup": YT("weighted pull up jeff nippard"), "ohp": YT("overhead press strict jeff nippard"), "pendlay": YT("pendlay row explosive"), "mech-drop": YT("mechanical drop set pull ups"), "face-pull": YT("face pull jeff nippard"), "woodchop": YT("cable woodchop low to high"),
+  "plyo-push": YT("plyometric push up explosive"), "bench-pause": YT("pause bench press jeff nippard"), "pullup": YT("weighted pull up jeff nippard"), "towel-pullup": YT("towel pull up grip strength grappling"), "ohp": YT("overhead press strict jeff nippard"), "pendlay": YT("pendlay row explosive"), "mech-drop": YT("mechanical drop set pull ups"), "face-pull": YT("face pull jeff nippard"), "woodchop": YT("cable woodchop low to high"),
   "clean": YT("hang power clean crossfit"), "deadlift": YT("conventional deadlift cluster sets"), "box-jump": YT("box jump crossfit"), "floor-press": YT("floor press barbell"), "chinup": YT("chin up eccentric"), "kb-rot-swing": YT("kettlebell rotational swing"), "landmine-rot": YT("landmine rotation barbell"),
   // Variant videos
   "walking-lunge": YT("walking lunge dumbbell technique"), "step-up": YT("step up barbell technique"), "gh-raise": YT("glute ham raise technique"), "leg-curl-slide": YT("slider leg curl hamstring"), "ab-wheel": YT("ab wheel rollout technique"), "dead-bug": YT("dead bug core exercise"),
@@ -32,6 +32,7 @@ const COACH = {
   "plyo-push": { why: "Puissance de poussee explosive : frames, push-offs, frappes directes.", how: "Push-up, descente controlee, explosion max, mains decollent. Atterrir soft.", focus: "Qualite > quantite. Plus de decollement = stop.", icon: "💥" },
   "bench-pause": { why: "Force dans la position la plus faible, sans momentum.", how: "Arche legere, omoplates serrees, descente 3s, pause 1s poitrine, explosion.", focus: "Pieds au sol. Barre au-dessus des poignets. Coudes 45 deg.", icon: "🏋️" },
   "pullup": { why: "Roi du haut du corps pour le grappling. Prise, tirage, controle distance.", how: "Pronation, dead hang, tirer coudes vers hanches, menton au-dessus.", focus: "Initier avec les lats. Descente controlee.", icon: "🏋️" },
+  "towel-pullup": { why: "Grip specifique no-gi : simule le controle de poignet et les body locks. La serviette force les flechisseurs des doigts a travailler en endurance.", how: "Deux serviettes sur la barre, une par main. Grip fort, tirer jusqu'au menton. Si le grip lache avant les lats, c'est le bon stimulus.", focus: "Serrer les serviettes comme si tu tenais un poignet. Ne jamais relacher la tension des doigts.", icon: "🤼" },
   "ohp": { why: "Poussee verticale : frames debout, underhooks, posture clinch.", how: "Strict debout, barre des clavicules, trajet vertical, verrouillage haut.", focus: "Fessiers + abdos serres. Tete passe a travers une fois au-dessus du front.", icon: "🏋️" },
   "arnold-press": { why: "Alternative a l'OHP : plus de rotation, travaille les 3 faisceaux du deltoide.", how: "Assis ou debout, DBs devant paumes vers soi, rotation + press vers le haut.", focus: "Mouvement fluide, pas de a-coup. Rotation complete.", icon: "🏋️" },
   "pendlay": { why: "Tirage explosif depuis le sol : snap-downs et controle de nuque.", how: "Buste parallele, barre au sol chaque rep. Tirage explosif vers le nombril.", focus: "Explosif, pas slow grind. Coudes serres, pas de triche hanches.", icon: "💥" },
@@ -56,9 +57,10 @@ const COACH = {
 };
 
 const PHASES = [
-  { name: "Fondation", weeks: [1,2,3,4], sub: "Hypertrophie + apprentissage moteur", color: "#40916C" },
-  { name: "Accumulation", weeks: [5,6,7,8], sub: "Force + pauses + 1.5 reps", color: "#E76F51" },
-  { name: "Intensification", weeks: [9,10,11,12], sub: "Puissance + speed-strength", color: "#9B5DE5" },
+  { name: "Accumulation", weeks: [1,2,3], sub: "Force max + volume", color: "#40916C", focus: "Pousser les charges, 4x4-6 lourd, clusters, pauses" },
+  { name: "Conversion", weeks: [4,5,6], sub: "Puissance specifique grappling", color: "#E76F51", focus: "Explosivite, grip, scrambles, puissance de hanche" },
+  { name: "Peaking", weeks: [7,8,9], sub: "Intensite haute, volume -40%", color: "#9B5DE5", focus: "2-3 reps lourds, finishers = rounds de comp" },
+  { name: "Taper", weeks: [10,11,12], sub: "Activation + recuperation", color: "#3B82F6", focus: "Mobilite, activation legere, zero fatigue, peak le 31 mai" },
 ];
 
 const QUOTES = [
@@ -129,8 +131,8 @@ const DAYS = [
       name: "Rowing Intervals", description: "5 x 500m rameur, 90s repos.", alt: "Alt : Pyramide 100>500>100m", duration: 900,
       scoreType: "splits", splits: 5, splitLabel: "500m",
       alts: [
-        { name: "Assault Bike Intervals", description: "5 x 1 min max effort, 90s repos.", duration: 750, scoreType: "splits", splits: 5, splitLabel: "1 min" },
-        { name: "KB Swing Ladder", description: "10-15-20-25-30 KB Swings (16kg), repos = 1 min entre chaque.", duration: 600, scoreType: "totalreps" },
+        { name: "Grappling Scramble Drill", description: "AMRAP 6 min : 5 Sprawls + 5 Sit-outs + 5 Turkish Get-ups (leger). Simule les transitions au sol.", duration: 360, scoreType: "rounds_reps" },
+        { name: "Takedown Conditioning", description: "EMOM 10 min : Min impaire 3 Double-leg shots (sans partenaire, explosif) + 3 Sprawls. Min paire 6 KB Swings + 6 Box Jumps.", duration: 600, scoreType: "rounds_reps" },
       ]
     },
   },
@@ -153,7 +155,9 @@ const DAYS = [
       { name: "Force & Hypertrophie", duration: "40 min", type: "strength", exercises: [
         { id: "plyo-push", name: "Plyometric Push-ups", sets: "3x5", detail: "Explosif, mains decollent", rest: "90s", muscle: "Pecs, Triceps", locked: true },
         { id: "bench-pause", name: "Bench Press (pause)", sets: "4x5", detail: "Tempo 3/1/X/0, ~70-85kg", rest: "2 min", muscle: "Pecs, Triceps", superset: "B1", locked: true },
-        { id: "pullup", name: "Weighted Pull-ups", sets: "4x5", detail: "Tempo 2/0/X/1, +6-15kg", rest: "2 min", muscle: "Lats, Biceps", superset: "B2", locked: true },
+        { id: "pullup", name: "Weighted Pull-ups", sets: "4x5", detail: "Tempo 2/0/X/1, +6-15kg", rest: "2 min", muscle: "Lats, Biceps", superset: "B2", locked: true, alts: [
+          { id: "towel-pullup", name: "Towel Pull-ups", sets: "4x5", detail: "Serviette sur la barre, grip no-gi", rest: "2 min", muscle: "Lats, Grip", superset: "B2" },
+        ]},
         { id: "ohp", name: "OHP (strict)", sets: "3x6", detail: "~50-60kg debout", rest: "90s", muscle: "Delts, Triceps", superset: "C1", locked: true, alts: [
           { id: "arnold-press", name: "Arnold Press (DB)", sets: "3x8", detail: "Rotation + press, assis ou debout", rest: "90s", muscle: "Delts, Triceps", superset: "C1" },
         ]},
@@ -173,8 +177,8 @@ const DAYS = [
       name: "EMOM 15 min", description: "Min 1: 10 KB Swings | Min 2: 8 Push-ups + 4 Sprawls | Min 3: 12 cal rameur. x5.", alt: "+1-2 reps/sem", duration: 900,
       scoreType: "rounds_reps", 
       alts: [
-        { name: "Tabata Push-ups", description: "8 rounds : 20s push-ups max / 10s repos.", duration: 240, scoreType: "splits", splits: 8, splitLabel: "Round" },
-        { name: "Cindy (scaled)", description: "AMRAP 10 min : 5 Pull-ups + 10 Push-ups + 15 Air Squats.", duration: 600, scoreType: "rounds_reps" },
+        { name: "Grip & Control Circuit", description: "AMRAP 8 min : 30s Dead Hang + 5 Towel Pull-ups + 10 Ring Rows + 5 Farmer's Walk 20m. No-gi grip endurance.", duration: 480, scoreType: "rounds_reps" },
+        { name: "Clinch Power EMOM", description: "EMOM 12 min : Min 1: 8 Landmine Press /bras. Min 2: 6 Chin-ups tempo 3s excentrique. Min 3: 10 Med Ball Rotational Throws.", duration: 720, scoreType: "rounds_reps" },
       ]
     },
   },
@@ -210,11 +214,11 @@ const DAYS = [
       ]},
     ],
     finisher: {
-      name: "Fight Simulation", description: "3 rounds 5 min, 1 min repos. 60s/exo : Bike > Burpees > KB Swings > Mt Climbers > Goblet Squats.", alt: "Score : total reps.", duration: 1080,
+      name: "Grappling Round Sim", description: "3 rounds 6 min, 1 min repos. 60s/station en continu : Sprawl-to-Shot > Bear Crawl 10m > KB Swing > Sit-outs > Burpee-to-Guard Pull. Simule No-Gi comp.", alt: "Score : total reps par round.", duration: 1140,
       scoreType: "splits", splits: 3, splitLabel: "Round",
       alts: [
-        { name: "Sprawl & Brawl", description: "AMRAP 8 min : 3 Sprawls + 5 KB Swings + 7 Burpees.", duration: 480, scoreType: "rounds_reps" },
-        { name: "MMA Tabata", description: "8 rounds 20s/10s. Alt : Burpees / Med Ball Slams / Mt Climbers / Sprawls.", duration: 240, scoreType: "splits", splits: 8, splitLabel: "Round" },
+        { name: "Scramble AMRAP", description: "AMRAP 8 min : 2 Turkish Get-ups + 4 Sprawls + 6 Sit-outs + 8 KB Swings. Enchaine sans pause. Transitions rapides.", duration: 480, scoreType: "rounds_reps" },
+        { name: "Comp Simulation", description: "4 rounds 6 min, 90s repos (simule un bracket de 4 matches). Chaque round : 30s Assault Bike sprint > 30s Sprawl+Shot > 30s Bear Crawl > 30s Rest. Repeat 3x dans le round.", duration: 1800, scoreType: "splits", splits: 4, splitLabel: "Match" },
       ]
     },
   },
