@@ -270,6 +270,43 @@ const BW_MAP = {
   "med-slam": { name: "Bear Crawl sur place", sets: "3x30s", detail: "🏨 Position quadrupedie, genoux 2cm du sol, avancer/reculer de 1m. Cardio intense, zero bruit.", rest: "60s", muscle: "Full Body" },
 };
 
+const BW_COACH = {
+  "squat-pause": { why: "Le pistol squat assiste construit la meme force unilaterale que le back squat, avec zero equipement. La pause en bas reproduit le dead stop.", how: "Main sur le mur ou une chaise stable. Descendre sur une jambe 3s, pause 2s en bas, remonter sans tirer avec le bras. L'autre jambe reste tendue devant.", focus: "Le bras sert d'equilibre, pas de force. Toute la puissance vient de la jambe. Talon au sol.", icon: "🏨" },
+  "bss": { why: "Le shrimp squat est le BSS sans banc. Meme pattern unilateral, meme profondeur, faisable dans 1m2.", how: "Debout, attraper le pied arriere avec la main. Descendre en controle jusqu'a ce que le genou touche le sol. Remonter sans lacher le pied.", focus: "Garder le torse droit. Si trop dur : lacher le pied et faire un reverse lunge lent.", icon: "🏨" },
+  "sl-rdl": { why: "Le glute bridge unilateral isole les ischios et fessiers sans bruit d'impact. Le lit sert de surface surelevee pour augmenter le range.", how: "Dos au sol, pieds sur le bord du lit. Lever une jambe, pousser avec l'autre pour soulever les hanches. Hold 2s en haut.", focus: "Serrer le fessier en haut. Ne pas cambrer le dos. Controler la descente.", icon: "🏨" },
+  "bench-pause": { why: "L'archer push-up est l'exercice de poussee unilateral le plus dur en bodyweight. Equivalent a un bench a ~70% du poids du corps sur un bras.", how: "Position push-up large. Descendre vers un bras en gardant l'autre tendu sur le cote. Pause 1s en bas, pousser explosif.", focus: "Le coude du bras qui travaille reste a 45deg. L'autre bras ne pousse pas, il glisse juste.", icon: "🏨" },
+  "pullup": { why: "La serviette sur la porte transforme n'importe quelle chambre d'hotel en station de tirage. L'angle des pieds regle la difficulte.", how: "Nouer une serviette epaisse sur la poignee de porte (cote charnieres pour que ca ne bouge pas). Pieds avances, corps incline, tirer la poitrine vers la porte.", focus: "Plus les pieds sont avances, plus c'est dur. Squeeze omoplates en haut 1s. La porte doit etre bien fermee.", icon: "🏨" },
+  "ohp": { why: "Les pike push-ups pieds sureleves reproduisent la poussee verticale de l'OHP. Plus les pieds sont hauts, plus c'est vertical = plus c'est dur.", how: "Pieds sur le lit, mains au sol, hanches a 90deg ou plus. Descendre la tete vers le sol, pousser vertical.", focus: "La tete passe entre les bras comme sur un OHP classique. Garder les abdos serres.", icon: "🏨" },
+  "clean": { why: "Le sprawl-to-stand reproduit le pattern d'extension de hanche explosive du clean sans aucun impact au sol. Poser les mains doucement.", how: "Position debout, poser les mains au sol (PAS de saut en arriere, descendre en controle), etendre les jambes, revenir et se relever le plus vite possible.", focus: "La phase de relevage est la phase explosive. Le plus vite possible. La descente est silencieuse et controlee.", icon: "🏨" },
+  "deadlift": { why: "Le hip thrust unilateral sur le lit est l'equivalent du deadlift pour la chaine posterieure sans aucune charge. Le lit = banc parfait.", how: "Haut du dos sur le bord du lit, un pied au sol, l'autre jambe tendue. Drive des hanches vers le plafond, hold 2s.", focus: "Serrer le fessier au maximum en haut. Ne pas hypercambrer. Le dos reste neutre.", icon: "🏨" },
+  "box-jump": { why: "Le squat iso explosif developpe la meme puissance que le box jump sans decoller les pieds. Intention maximale, zero bruit.", how: "Descendre en squat sur 3s. En bas, generer l'intention de sauter le plus haut possible mais garder les pieds colles au sol. Extension rapide.", focus: "Le cerveau ne fait pas la difference entre l'intention et l'action. Meme recrutement nerveux, zero impact.", icon: "🏨" },
+  "floor-press": { why: "Les decline push-ups pieds sur le lit augmentent la charge sur les pecs et epaules par rapport aux push-ups classiques.", how: "Pieds sur le lit, mains au sol, descendre la poitrine au sol, pousser. Full ROM.", focus: "Garder le corps droit, pas de hanches qui tombent. Serrer les abdos.", icon: "🏨" },
+  "mech-drop": { why: "Le mechanical drop set en push-ups couvre 3 angles de poussee sans bouger de place. Hypertrophie max en 5 minutes.", how: "Decline (pieds sur lit) AMRAP > Push-ups normaux AMRAP > Incline (mains sur lit) AMRAP. Zero repos entre les positions.", focus: "Aller a l'echec technique sur chaque position. Le total devrait etre 30-50+ reps.", icon: "🔥" },
+  "face-pull": { why: "Le Y-T-W est le meilleur exercice d'hotel pour la sante des epaules. Parfait apres un long vol ou une journee de PC.", how: "Allonge face au lit ou au sol. Bras en Y (pouces vers le haut), hold 2s. Puis T. Puis W. 8 reps chaque.", focus: "Squeeze les omoplates a chaque position. Mouvement lent et controle. Sentir les muscles entre les omoplates.", icon: "🏨" },
+};
+
+const BW_VIDEOS = {
+  "squat-pause": YT("pistol squat assisted wall progression"),
+  "bss": YT("shrimp squat tutorial progression"),
+  "sl-rdl": YT("single leg glute bridge elevated technique"),
+  "bench-pause": YT("archer push up tutorial progression"),
+  "pullup": YT("towel door row bodyweight back exercise hotel"),
+  "ohp": YT("pike push up elevated feet technique"),
+  "clean": YT("sprawl to stand explosive bodyweight"),
+  "deadlift": YT("single leg hip thrust elevated technique"),
+  "box-jump": YT("squat intent to jump isometric power"),
+  "floor-press": YT("decline push up feet elevated technique"),
+  "mech-drop": YT("push up mechanical drop set decline normal incline"),
+  "face-pull": YT("prone YTW shoulder exercise"),
+  "plyo-push": YT("explosive push up soft landing no clap"),
+  "pallof": YT("side plank rotation anti rotation core"),
+  "woodchop": YT("bicycle crunch slow controlled technique"),
+  "landmine-rot": YT("russian twist bodyweight technique"),
+  "chinup": YT("towel isometric curl bodyweight biceps"),
+  "kb-rot-swing": YT("reverse lunge rotation bodyweight"),
+  "med-slam": YT("bear crawl in place technique"),
+};
+
 export default function SCTracker() {
   const [tab, setTab] = useState("session");
   const [week, setWeek] = useState(1);
@@ -469,7 +506,7 @@ export default function SCTracker() {
                           )}
                         </div>
                       )}
-                      {V[ex.id] && <a href={V[ex.id]} target="_blank" rel="noopener noreferrer" style={{ width: 26, height: 26, borderRadius: 7, background: "#FEF3F2", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", flexShrink: 0 }}><span style={{ fontSize: 10 }}>▶</span></a>}
+                      {((travelMode && BW_VIDEOS[ex.id]) || V[ex.id]) && <a href={((travelMode && BW_VIDEOS[ex.id]) || V[ex.id])} target="_blank" rel="noopener noreferrer" style={{ width: 26, height: 26, borderRadius: 7, background: "#FEF3F2", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", flexShrink: 0 }}><span style={{ fontSize: 10 }}>▶</span></a>}
                     </div>
                   </div>
                 );
@@ -482,7 +519,7 @@ export default function SCTracker() {
                 const exData = getStr(ex.id, n);
                 const allDone = n > 0 && exData.sets.slice(0,n).every(s => s.done);
                 const isOpen = openEx === slotKey;
-                const coach = COACH[ex.id];
+                const coach = (travelMode && BW_COACH[ex.id]) ? BW_COACH[ex.id] : COACH[ex.id];
                 const hasAlts = ex._alts?.length > 0;
                 const isLocked = rawEx.locked && !hasAlts;
 
@@ -532,7 +569,7 @@ export default function SCTracker() {
                         )}
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                           <div style={{ fontSize: 11, color: "#6B7280", fontFamily: f }}>{ex.detail} | Repos {ex.rest}</div>
-                          {V[ex.id] && <a href={V[ex.id]} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 10px", borderRadius: 8, background: "#FEF3F2", textDecoration: "none", fontSize: 11, color: "#EF4444", fontFamily: f, fontWeight: 600 }}>▶ Video</a>}
+                          {((travelMode && BW_VIDEOS[ex.id]) || V[ex.id]) && <a href={((travelMode && BW_VIDEOS[ex.id]) || V[ex.id])} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 10px", borderRadius: 8, background: "#FEF3F2", textDecoration: "none", fontSize: 11, color: "#EF4444", fontFamily: f, fontWeight: 600 }}>▶ Video</a>}
                         </div>
                         {Array.from({ length: n }, (_, si) => {
                           const set = exData.sets[si] || { done: false, weight: "", reps: "" };
