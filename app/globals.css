@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+body {
+  background: #F8F7F4;
+  font-family: 'Outfit', -apple-system, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
