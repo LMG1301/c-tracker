@@ -227,6 +227,46 @@ const DAYS = [
 const SK = "sc-tracker-v8";
 function getPhase(w) { return PHASES.find(p => p.weeks.includes(w)) || PHASES[0]; }
 
+/* Bodyweight alternatives for travel mode */
+const BW_MAP = {
+  "broad-jump": { name: "Broad Jumps", sets: "4x5", detail: "Identique, pas besoin de poids", rest: "90s", muscle: "Full Body" },
+  "squat-pause": { name: "Pistol Squat (assist)", sets: "4x4/jambe", detail: "Tenir un poteau/mur, descente 3s, pause 2s en bas", rest: "2 min", muscle: "Quads, Glutes" },
+  "bss": { name: "Shrimp Squat", sets: "3x6/jambe", detail: "Descente controlee, genou arriere au sol", rest: "90s", muscle: "Quads, Glutes" },
+  "walking-lunge": { name: "Jump Lunges", sets: "3x8/jambe", detail: "Alternance explosive, atterrir soft", rest: "90s", muscle: "Quads, Glutes" },
+  "step-up": { name: "Step-up explosif", sets: "3x6/jambe", detail: "Chaise ou banc, drive explosif du talon", rest: "90s", muscle: "Quads, Glutes" },
+  "sl-rdl": { name: "Single-Leg Glute Bridge", sets: "3x10/jambe", detail: "Dos au sol, une jambe tendue, hold 2s en haut", rest: "60s", muscle: "Hamstrings, Glutes" },
+  "gh-raise": { name: "Nordic Curl (assist)", sets: "3x5", detail: "Pieds bloques sous un meuble, descente max controlee", rest: "60s", muscle: "Hamstrings" },
+  "leg-curl-slide": { name: "Towel Leg Curl", sets: "3x8", detail: "Pieds sur serviette, sol lisse, bridge + curl", rest: "60s", muscle: "Hamstrings" },
+  "pallof": { name: "Copenhagen Plank", sets: "3x20s/cote", detail: "Avant-bras au sol, jambe haute sur banc, hold", rest: "45s", muscle: "Core, Adducteurs" },
+  "ab-wheel": { name: "Body Saw Plank", sets: "3x8", detail: "Planche sur avant-bras, glisser d'avant en arriere", rest: "45s", muscle: "Core" },
+  "dead-bug": { name: "Dead Bug", sets: "3x8/cote", detail: "Identique, bodyweight", rest: "45s", muscle: "Core" },
+  "plyo-push": { name: "Clap Push-ups", sets: "3x5", detail: "Explosif, clap en haut, atterrir soft", rest: "90s", muscle: "Pecs, Triceps" },
+  "bench-pause": { name: "Archer Push-ups", sets: "4x5/cote", detail: "Un bras travaille, l'autre en appui lateral. Pause 1s en bas.", rest: "2 min", muscle: "Pecs, Triceps" },
+  "pullup": { name: "Pull-ups (bodyweight)", sets: "4x max", detail: "Dead hang, strict, tempo 2-0-X-1", rest: "2 min", muscle: "Lats, Biceps" },
+  "towel-pullup": { name: "Towel Row (porte)", sets: "4x8", detail: "Serviette sur une porte, pieds avances, tirer", rest: "2 min", muscle: "Lats, Grip" },
+  "ohp": { name: "Pike Push-ups (sureleve)", sets: "3x8", detail: "Pieds sur chaise, hanches a 90deg, pousser vertical", rest: "90s", muscle: "Delts, Triceps" },
+  "arnold-press": { name: "Handstand Hold", sets: "3x20-30s", detail: "Contre un mur, hold en position", rest: "90s", muscle: "Delts, Triceps" },
+  "pendlay": { name: "Inverted Row (table)", sets: "3x10", detail: "Sous une table solide, tirer la poitrine vers le bord", rest: "90s", muscle: "Upper Back" },
+  "db-row": { name: "Inverted Row (1 bras)", sets: "3x8/bras", detail: "Sous une table, un bras, tirer vers la hanche", rest: "90s", muscle: "Upper Back" },
+  "mech-drop": { name: "Pull-up Mech Drop", sets: "2 sets", detail: "Wide grip AMRAP > Normal AMRAP > Chin-ups AMRAP", rest: "2 min", muscle: "Lats, Biceps" },
+  "face-pull": { name: "Prone Y-T-W", sets: "3x8 chaque", detail: "Allonge face au sol, bras en Y puis T puis W. Squeeze omoplates.", rest: "45s", muscle: "Rear Delts, Rotateurs" },
+  "lat-raise": { name: "Pike Push-up partiel", sets: "3x10", detail: "Demi-ROM pour cibler les delts", rest: "45s", muscle: "Delts" },
+  "woodchop": { name: "Bicycle Crunch explosif", sets: "3x12/cote", detail: "Rotation maximale, coude vers genou oppose", rest: "45s", muscle: "Obliques" },
+  "cable-fly": { name: "Push-up diamant", sets: "3x12", detail: "Mains rapprochees, squeeze pecs en haut", rest: "45s", muscle: "Pecs" },
+  "clean": { name: "Broad Jump + Burpee", sets: "5x3", detail: "Broad jump max + burpee immediat. Simule l'explosivite du clean.", rest: "2.5 min", muscle: "Full Body" },
+  "deadlift": { name: "Single-Leg Hip Thrust", sets: "3x8/jambe", detail: "Dos sur banc/lit, une jambe, drive max en haut, hold 2s", rest: "2 min", muscle: "Post. Chain" },
+  "box-jump": { name: "Tuck Jumps", sets: "3x5", detail: "Sauter, genoux a la poitrine en l'air, atterrir soft", rest: "90s", muscle: "Quads, Glutes" },
+  "jump-squat": { name: "Squat Jumps", sets: "3x6", detail: "Air squat + saut max, atterrir soft", rest: "90s", muscle: "Quads, Glutes" },
+  "floor-press": { name: "Decline Push-ups", sets: "3x10", detail: "Pieds sureleves sur chaise/lit, full ROM", rest: "90s", muscle: "Pecs, Triceps" },
+  "db-bench": { name: "Push-ups tempo", sets: "3x8", detail: "Tempo 3-1-X-0, full ROM, squeeze en haut", rest: "90s", muscle: "Pecs, Triceps" },
+  "chinup": { name: "Chin-ups (bodyweight)", sets: "3x max", detail: "Excentrique 3s, strict", rest: "90s", muscle: "Lats, Biceps" },
+  "kb-rot-swing": { name: "Rotational Lunge", sets: "3x8/cote", detail: "Lunge avant + rotation du torse vers le genou avant", rest: "60s", muscle: "Obliques, Hips" },
+  "med-rot-throw": { name: "Rotational Jump", sets: "3x5/cote", detail: "Squat jump avec rotation 180deg, atterrir stable", rest: "60s", muscle: "Obliques, Hips" },
+  "landmine-rot": { name: "Russian Twist", sets: "3x12/cote", detail: "Assis, pieds decolles, rotation complete", rest: "60s", muscle: "Core, Obliques" },
+  "kb-swing": { name: "Glute Bridge March", sets: "3x12/jambe", detail: "Bridge position, alterner les jambes en marchant", rest: "60s", muscle: "Post. Chain" },
+  "med-slam": { name: "Burpee Broad Jump", sets: "3x6", detail: "Burpee + broad jump max. Puissance totale.", rest: "60s", muscle: "Full Body" },
+};
+
 export default function SCTracker() {
   const [tab, setTab] = useState("session");
   const [week, setWeek] = useState(1);
@@ -238,6 +278,7 @@ export default function SCTracker() {
   const [openEx, setOpenEx] = useState(null);
   const [swapSlot, setSwapSlot] = useState(null);
   const [resetConfirm, setResetConfirm] = useState("");
+  const [travelMode, setTravelMode] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
   const [timer, setTimer] = useState(null);
   const [timerVal, setTimerVal] = useState(0);
@@ -269,12 +310,19 @@ export default function SCTracker() {
   const setFinVar = (idx) => save({ ...data, [finVarKey()]: idx });
 
   const resolveEx = (ex, slotKey) => {
+    let resolved;
     const selected = getVar(slotKey);
     if (selected && ex.alts) {
       const alt = ex.alts.find(a => a.id === selected);
-      if (alt) return { ...alt, _slot: slotKey, _alts: ex.alts, _defaultId: ex.id, _default: ex };
+      if (alt) resolved = { ...alt, _slot: slotKey, _alts: ex.alts, _defaultId: ex.id, _default: ex };
     }
-    return { ...ex, _slot: slotKey, _alts: ex.alts || [], _defaultId: ex.id, _default: ex };
+    if (!resolved) resolved = { ...ex, _slot: slotKey, _alts: ex.alts || [], _defaultId: ex.id, _default: ex };
+    // Apply bodyweight override in travel mode
+    if (travelMode && BW_MAP[resolved.id]) {
+      const bw = BW_MAP[resolved.id];
+      resolved = { ...resolved, ...bw, _isBw: true, _originalName: resolved.name };
+    }
+    return resolved;
   };
 
   const resolveFinisher = (fin) => {
@@ -726,6 +774,17 @@ export default function SCTracker() {
         </div>
         <div style={{ display: "flex", gap: 4, marginTop: 14, overflowX: "auto" }}>
           {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => { const p = getPhase(w); return <button key={w} onClick={() => setWeek(w)} style={{ minWidth: 30, height: 30, borderRadius: 10, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: f, background: w===week ? p.color : "#F3F4F6", color: w===week ? "#fff" : "#9CA3AF" }}>{w}</button>; })}
+        </div>
+        {/* Travel mode toggle */}
+        <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 8 }}>
+          <button onClick={() => setTravelMode(!travelMode)} style={{
+            display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, border: "none", cursor: "pointer", fontFamily: f, fontSize: 12, fontWeight: 600,
+            background: travelMode ? "#FEF3C7" : "#F3F4F6", color: travelMode ? "#D97706" : "#9CA3AF",
+            transition: "all 0.2s",
+          }}>
+            {travelMode ? "✈️ Mode Voyage" : "🏠 Mode Salle"}
+          </button>
+          {travelMode && <span style={{ fontSize: 10, color: "#D97706", fontFamily: f }}>Exercices adaptes bodyweight</span>}
         </div>
       </div>
 
