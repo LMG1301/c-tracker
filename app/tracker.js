@@ -230,44 +230,71 @@ function getPhase(w) { return PHASES.find(p => p.weeks.includes(w)) || PHASES[0]
 /* Bodyweight alternatives for hotel room: ZERO bruit, ZERO materiel, petit espace */
 const BW_MAP = {
   // LOWER
-  "broad-jump": { name: "Split Squat Iso Hold", sets: "4x20s/jambe", detail: "🏨 Position fente basse, hold 20s. Pas de saut, tension max.", rest: "60s", muscle: "Full Body" },
-  "squat-pause": { name: "Pistol Squat (assist)", sets: "4x4/jambe", detail: "🏨 Main sur le mur ou chaise, descente 3s, pause 2s en bas, remonter sans momentum", rest: "2 min", muscle: "Quads, Glutes" },
-  "bss": { name: "Shrimp Squat", sets: "3x6/jambe", detail: "🏨 Attraper le pied arriere, descente controlee genou au sol. Silencieux, petit espace.", rest: "90s", muscle: "Quads, Glutes" },
-  "walking-lunge": { name: "Reverse Lunge tempo", sets: "3x8/jambe", detail: "🏨 Sur place, pas en arriere, tempo 3-1-2-0. Pas de bruit d'impact.", rest: "90s", muscle: "Quads, Glutes" },
-  "step-up": { name: "Step-up lent (chaise)", sets: "3x6/jambe", detail: "🏨 Chaise de bureau stable, monter lentement, descente 3s. Poser le pied doucement.", rest: "90s", muscle: "Quads, Glutes" },
-  "sl-rdl": { name: "SL Glute Bridge (lit)", sets: "3x10/jambe", detail: "🏨 Dos au sol, pieds sur le lit, une jambe tendue, hold 2s en haut. Silencieux.", rest: "60s", muscle: "Hamstrings, Glutes" },
-  "gh-raise": { name: "Nordic Curl (lit)", sets: "3x5", detail: "🏨 Pieds coinces sous le cadre du lit, descente max controlee. Remonter avec les mains si besoin.", rest: "60s", muscle: "Hamstrings" },
-  "leg-curl-slide": { name: "Towel Leg Curl", sets: "3x8", detail: "🏨 Pieds sur serviette d'hotel, sol lisse de la salle de bain. Bridge + curl lent.", rest: "60s", muscle: "Hamstrings" },
-  "pallof": { name: "Side Plank + Rotation", sets: "3x8/cote", detail: "🏨 Side plank sur avant-bras, rotation du bras libre sous le corps. Anti-rotation sans bruit.", rest: "45s", muscle: "Core, Obliques" },
-  "ab-wheel": { name: "Body Saw Plank (serviette)", sets: "3x8", detail: "🏨 Planche avant-bras, pieds sur serviette, glisser d'avant en arriere sur sol lisse.", rest: "45s", muscle: "Core" },
-  "dead-bug": { name: "Dead Bug", sets: "3x8/cote", detail: "🏨 Parfait pour hotel : allonge, bras et jambes opposes, zero bruit.", rest: "45s", muscle: "Core" },
+  "broad-jump": { name: "Split Squat Iso Hold", sets: "4x20s/jambe", detail: "🏨 Position fente basse, hold 20s. Pas de saut, tension max.", rest: "60s", muscle: "Full Body", bwAlts: [
+    { id: "bw-squat-pulse", name: "Squat Pulse", sets: "4x15", detail: "🏨 Demi-squat, pulser en bas sans remonter. Burn silencieux.", rest: "60s", muscle: "Quads" },
+  ]},
+  "squat-pause": { name: "Pistol Squat (assist)", sets: "4x4/jambe", detail: "🏨 Main sur le mur, descente 3s, pause 2s en bas", rest: "2 min", muscle: "Quads, Glutes", bwAlts: [
+    { id: "bw-wall-sit", name: "Wall Sit", sets: "4x45s", detail: "🏨 Dos au mur, cuisses paralleles. Hold. Ajouter 1 jambe pour augmenter.", rest: "90s", muscle: "Quads" },
+    { id: "bw-sissy-squat", name: "Sissy Squat (assist)", sets: "4x6", detail: "🏨 Tenir le mur, reculer les genoux, torse incline en arriere. Quad killer.", rest: "2 min", muscle: "Quads" },
+  ]},
+  "bss": { name: "Shrimp Squat", sets: "3x6/jambe", detail: "🏨 Attraper le pied arriere, descente controlee genou au sol.", rest: "90s", muscle: "Quads, Glutes", bwAlts: [
+    { id: "bw-skater-squat", name: "Skater Squat", sets: "3x6/jambe", detail: "🏨 Comme un shrimp mais bras devant pour l'equilibre, jambe arriere libre.", rest: "90s", muscle: "Quads, Glutes" },
+  ]},
+  "walking-lunge": { name: "Reverse Lunge tempo", sets: "3x8/jambe", detail: "🏨 Sur place, pas en arriere, tempo 3-1-2-0.", rest: "90s", muscle: "Quads, Glutes" },
+  "step-up": { name: "Step-up lent (chaise)", sets: "3x6/jambe", detail: "🏨 Chaise stable, monter lent, descente 3s.", rest: "90s", muscle: "Quads, Glutes" },
+  "sl-rdl": { name: "SL Glute Bridge (lit)", sets: "3x10/jambe", detail: "🏨 Dos au sol, pieds sur le lit, une jambe tendue, hold 2s en haut.", rest: "60s", muscle: "Hamstrings, Glutes", bwAlts: [
+    { id: "bw-sl-rdl-stand", name: "SL RDL bodyweight", sets: "3x8/jambe", detail: "🏨 Debout, hinge sur une jambe, toucher le sol, remonter. Lent et controle.", rest: "60s", muscle: "Hamstrings, Glutes" },
+  ]},
+  "gh-raise": { name: "Nordic Curl (lit)", sets: "3x5", detail: "🏨 Pieds coinces sous le cadre du lit, descente max controlee.", rest: "60s", muscle: "Hamstrings" },
+  "leg-curl-slide": { name: "Towel Leg Curl", sets: "3x8", detail: "🏨 Pieds sur serviette, sol salle de bain, bridge + curl lent.", rest: "60s", muscle: "Hamstrings" },
+  "pallof": { name: "Side Plank + Rotation", sets: "3x8/cote", detail: "🏨 Side plank sur avant-bras, rotation du bras libre sous le corps.", rest: "45s", muscle: "Core, Obliques", bwAlts: [
+    { id: "bw-dead-bug-hard", name: "Dead Bug (jambes tendues)", sets: "3x6/cote", detail: "🏨 Comme le dead bug mais jambes tendues. Beaucoup plus dur sur le core.", rest: "45s", muscle: "Core" },
+    { id: "bw-plank-reach", name: "Plank Shoulder Tap", sets: "3x10/cote", detail: "🏨 Planche haute, toucher epaule opposee en alternant. Anti-rotation.", rest: "45s", muscle: "Core" },
+  ]},
+  "ab-wheel": { name: "Body Saw Plank (serviette)", sets: "3x8", detail: "🏨 Planche avant-bras, pieds sur serviette, glisser d'avant en arriere.", rest: "45s", muscle: "Core" },
+  "dead-bug": { name: "Dead Bug", sets: "3x8/cote", detail: "🏨 Allonge, bras et jambes opposes, zero bruit.", rest: "45s", muscle: "Core" },
   // UPPER
-  "plyo-push": { name: "Push-up explosif (mains decollent)", sets: "3x5", detail: "🏨 Push-up, pousser fort pour decoller les mains mais ATTERRIR SOFT sur la moquette. Pas de clap.", rest: "90s", muscle: "Pecs, Triceps" },
-  "bench-pause": { name: "Archer Push-ups", sets: "4x5/cote", detail: "🏨 Un bras travaille, l'autre en appui lateral. Pause 1s en bas. Silencieux, devastateur.", rest: "2 min", muscle: "Pecs, Triceps" },
-  "pullup": { name: "Towel Row (porte)", sets: "4x8", detail: "🏨 Serviette nouee sur la poignee de porte, pieds avances, tirer la poitrine vers la porte. Angle = difficulte.", rest: "2 min", muscle: "Lats, Biceps" },
-  "towel-pullup": { name: "Towel Row iso hold", sets: "4x20s", detail: "🏨 Meme position que Towel Row mais hold en haut, squeeze les omoplates. Grip killer.", rest: "2 min", muscle: "Lats, Grip" },
-  "ohp": { name: "Pike Push-ups (lit)", sets: "3x8", detail: "🏨 Pieds sur le lit, hanches a 90deg, pousser vertical. Moquette sous les mains.", rest: "90s", muscle: "Delts, Triceps" },
-  "arnold-press": { name: "Handstand Hold (mur)", sets: "3x20-30s", detail: "🏨 Dos au mur, monter en handstand, hold. Si moquette : poser une serviette sous les mains.", rest: "90s", muscle: "Delts, Triceps" },
-  "pendlay": { name: "Inverted Row (table)", sets: "3x10", detail: "🏨 Sous le bureau de la chambre, tirer la poitrine vers le bord. Table stable uniquement.", rest: "90s", muscle: "Upper Back" },
-  "db-row": { name: "Towel Row 1 bras", sets: "3x8/bras", detail: "🏨 Serviette sur la porte, un seul bras, tirer vers la hanche. Pieds plus avances = plus dur.", rest: "90s", muscle: "Upper Back" },
-  "mech-drop": { name: "Push-up Mech Drop", sets: "2 sets", detail: "🏨 Decline push-ups (pieds sur lit) AMRAP > Push-ups normaux AMRAP > Incline push-ups (mains sur lit) AMRAP. Zero bruit.", rest: "2 min", muscle: "Pecs, Triceps, Delts" },
-  "face-pull": { name: "Prone Y-T-W", sets: "3x8 chaque", detail: "🏨 Allonge face au sol/lit, bras en Y puis T puis W. Squeeze omoplates 2s. Parfait post-avion.", rest: "45s", muscle: "Rear Delts, Rotateurs" },
-  "lat-raise": { name: "Wall Press iso", sets: "3x15s/cote", detail: "🏨 Debout a cote du mur, bras a 90deg, pousser le mur lateralement de toutes tes forces. Isometrique.", rest: "45s", muscle: "Delts" },
-  "woodchop": { name: "Bicycle Crunch lent", sets: "3x12/cote", detail: "🏨 Au sol, rotation controlee, coude vers genou oppose. Tempo lent, squeeze oblique.", rest: "45s", muscle: "Obliques" },
+  "plyo-push": { name: "Push-up explosif (soft)", sets: "3x5", detail: "🏨 Pousser fort, mains decollent, atterrir soft sur moquette. Pas de clap.", rest: "90s", muscle: "Pecs, Triceps", bwAlts: [
+    { id: "bw-push-tempo", name: "Push-up tempo extreme", sets: "3x5", detail: "🏨 5s descente, 3s pause en bas, explosif en haut. Pas besoin de decoller.", rest: "90s", muscle: "Pecs, Triceps" },
+  ]},
+  "bench-pause": { name: "Archer Push-ups", sets: "4x5/cote", detail: "🏨 Un bras travaille, l'autre en appui lateral. Pause 1s en bas.", rest: "2 min", muscle: "Pecs, Triceps", bwAlts: [
+    { id: "bw-push-deficit", name: "Push-up deficit (livres)", sets: "4x6", detail: "🏨 Mains sur 2 livres/valises pour augmenter le ROM. Full stretch en bas.", rest: "2 min", muscle: "Pecs, Triceps" },
+  ]},
+  "pullup": { name: "Towel Row (porte)", sets: "4x8", detail: "🏨 Serviette sur poignee de porte, pieds avances, tirer poitrine vers la porte.", rest: "2 min", muscle: "Lats, Biceps", bwAlts: [
+    { id: "bw-inv-row-table", name: "Inverted Row (bureau)", sets: "4x8", detail: "🏨 Sous le bureau, tirer la poitrine vers le bord. Pieds avances = plus dur.", rest: "2 min", muscle: "Lats, Upper Back" },
+    { id: "bw-towel-iso", name: "Towel Row iso hold", sets: "4x20s", detail: "🏨 Meme position que Towel Row mais hold en haut. Squeeze omoplates. Grip endurance.", rest: "2 min", muscle: "Lats, Grip" },
+  ]},
+  "towel-pullup": { name: "Towel Row iso hold", sets: "4x20s", detail: "🏨 Meme position que Towel Row, hold en haut, squeeze omoplates.", rest: "2 min", muscle: "Lats, Grip" },
+  "ohp": { name: "Pike Push-ups (lit)", sets: "3x8", detail: "🏨 Pieds sur le lit, hanches a 90deg, pousser vertical.", rest: "90s", muscle: "Delts, Triceps", bwAlts: [
+    { id: "bw-hspu-neg", name: "Handstand Negative (mur)", sets: "3x3", detail: "🏨 Monter en handstand contre le mur, descente 5s jusqu'a la tete, remonter avec un kick.", rest: "90s", muscle: "Delts, Triceps" },
+  ]},
+  "arnold-press": { name: "Handstand Hold (mur)", sets: "3x20-30s", detail: "🏨 Dos au mur, hold en position.", rest: "90s", muscle: "Delts, Triceps" },
+  "pendlay": { name: "Inverted Row (table)", sets: "3x10", detail: "🏨 Sous le bureau, tirer la poitrine vers le bord.", rest: "90s", muscle: "Upper Back" },
+  "db-row": { name: "Towel Row 1 bras", sets: "3x8/bras", detail: "🏨 Serviette sur la porte, un bras, tirer vers la hanche.", rest: "90s", muscle: "Upper Back" },
+  "mech-drop": { name: "Push-up Mech Drop", sets: "2 sets", detail: "🏨 Decline (pieds sur lit) AMRAP > Normal AMRAP > Incline (mains sur lit) AMRAP.", rest: "2 min", muscle: "Pecs, Triceps, Delts" },
+  "face-pull": { name: "Prone Y-T-W", sets: "3x8 chaque", detail: "🏨 Face au sol/lit, Y puis T puis W. Squeeze omoplates 2s.", rest: "45s", muscle: "Rear Delts, Rotateurs" },
+  "lat-raise": { name: "Wall Press iso", sets: "3x15s/cote", detail: "🏨 Debout cote mur, pousser lateralement de toutes tes forces. Isometrique.", rest: "45s", muscle: "Delts" },
+  "woodchop": { name: "Bicycle Crunch lent", sets: "3x12/cote", detail: "🏨 Au sol, rotation controlee, coude vers genou oppose.", rest: "45s", muscle: "Obliques" },
   "cable-fly": { name: "Push-up diamant", sets: "3x12", detail: "🏨 Mains rapprochees, squeeze pecs en haut. Tempo 2-1-2-0.", rest: "45s", muscle: "Pecs" },
   // FULL BODY POWER
-  "clean": { name: "Sprawl-to-Stand explosif", sets: "5x3", detail: "🏨 Sprawl controle au sol (pas de saut, poser les mains doucement), remonter explosif. Simule le clean sans bruit.", rest: "2.5 min", muscle: "Full Body" },
-  "deadlift": { name: "SL Hip Thrust (lit)", sets: "3x8/jambe", detail: "🏨 Haut du dos sur le lit, une jambe, drive max en haut, hold 2s. Le lit = banc parfait.", rest: "2 min", muscle: "Post. Chain" },
-  "box-jump": { name: "Squat iso explosif", sets: "3x5", detail: "🏨 Descendre en squat 3s, remonter le plus vite possible SANS decoller les pieds. Intention de saut, pieds au sol.", rest: "90s", muscle: "Quads, Glutes" },
-  "jump-squat": { name: "Squat pulse 1.5 rep", sets: "3x8", detail: "🏨 Descendre full, remonter a mi-chemin, redescendre, remonter full = 1 rep. Devastateur sans bruit.", rest: "90s", muscle: "Quads, Glutes" },
-  "floor-press": { name: "Decline Push-ups (lit)", sets: "3x10", detail: "🏨 Pieds sur le lit, mains au sol. Full ROM, squeeze pecs en haut.", rest: "90s", muscle: "Pecs, Triceps" },
-  "db-bench": { name: "Push-ups tempo", sets: "3x8", detail: "🏨 Tempo 4-2-1-0 : 4s descente, 2s pause en bas, remonter, zero pause en haut. Brutal.", rest: "90s", muscle: "Pecs, Triceps" },
-  "chinup": { name: "Towel Curl iso", sets: "3x6", detail: "🏨 Serviette sous un pied, tirer vers le haut avec les deux mains en position curl. Le pied resiste. Iso biceps.", rest: "90s", muscle: "Biceps" },
-  "kb-rot-swing": { name: "Lunge + Rotation", sets: "3x8/cote", detail: "🏨 Lunge arriere + rotation du torse vers le genou avant. Lent, controle, zero bruit.", rest: "60s", muscle: "Obliques, Hips" },
-  "med-rot-throw": { name: "Standing Rotation iso (mur)", sets: "3x15s/cote", detail: "🏨 Mains contre le mur, pieds ancres, pousser en rotation de toutes tes forces. Isometrique, zero bruit.", rest: "60s", muscle: "Obliques, Hips" },
-  "landmine-rot": { name: "Russian Twist (lent)", sets: "3x12/cote", detail: "🏨 Assis au sol, pieds decolles, rotation lente complete. Tenir une valise ou un sac pour ajouter du poids.", rest: "60s", muscle: "Core, Obliques" },
-  "kb-swing": { name: "Glute Bridge March", sets: "3x12/jambe", detail: "🏨 Bridge position, alterner les jambes en marchant. Hanches hautes tout le temps. Silencieux.", rest: "60s", muscle: "Post. Chain" },
-  "med-slam": { name: "Bear Crawl sur place", sets: "3x30s", detail: "🏨 Position quadrupedie, genoux 2cm du sol, avancer/reculer de 1m. Cardio intense, zero bruit.", rest: "60s", muscle: "Full Body" },
+  "clean": { name: "Sprawl-to-Stand explosif", sets: "5x3", detail: "🏨 Poser les mains doucement, remonter explosif.", rest: "2.5 min", muscle: "Full Body", bwAlts: [
+    { id: "bw-burpee-slow", name: "Burpee controle", sets: "5x3", detail: "🏨 Descendre en controle (pas de saut), push-up en bas, remonter explosif. Silencieux.", rest: "2.5 min", muscle: "Full Body" },
+  ]},
+  "deadlift": { name: "SL Hip Thrust (lit)", sets: "3x8/jambe", detail: "🏨 Haut du dos sur le lit, une jambe, drive max en haut, hold 2s.", rest: "2 min", muscle: "Post. Chain", bwAlts: [
+    { id: "bw-bridge-march", name: "Glute Bridge March (lit)", sets: "3x10/jambe", detail: "🏨 Pieds sur le lit, bridge position, alterner jambes. Hanches hautes.", rest: "2 min", muscle: "Post. Chain, Glutes" },
+  ]},
+  "box-jump": { name: "Squat iso explosif", sets: "3x5", detail: "🏨 Descendre 3s, remonter max SANS decoller les pieds. Intention de saut.", rest: "90s", muscle: "Quads, Glutes", bwAlts: [
+    { id: "bw-squat-15", name: "Squat 1.5 rep", sets: "3x8", detail: "🏨 Descendre full, remonter mi-chemin, redescendre, remonter full = 1 rep.", rest: "90s", muscle: "Quads, Glutes" },
+  ]},
+  "jump-squat": { name: "Squat pulse 1.5 rep", sets: "3x8", detail: "🏨 Descendre full, mi-chemin, redescendre, full = 1 rep. Brutal sans bruit.", rest: "90s", muscle: "Quads, Glutes" },
+  "floor-press": { name: "Decline Push-ups (lit)", sets: "3x10", detail: "🏨 Pieds sur le lit, mains au sol, full ROM.", rest: "90s", muscle: "Pecs, Triceps" },
+  "db-bench": { name: "Push-ups tempo", sets: "3x8", detail: "🏨 Tempo 4-2-1-0, brutal.", rest: "90s", muscle: "Pecs, Triceps" },
+  "chinup": { name: "Towel Curl iso", sets: "3x6", detail: "🏨 Serviette sous un pied, tirer en curl. Le pied resiste.", rest: "90s", muscle: "Biceps" },
+  "kb-rot-swing": { name: "Lunge + Rotation", sets: "3x8/cote", detail: "🏨 Lunge arriere + rotation torse vers genou avant. Lent, zero bruit.", rest: "60s", muscle: "Obliques, Hips" },
+  "med-rot-throw": { name: "Standing Rotation iso (mur)", sets: "3x15s/cote", detail: "🏨 Mains contre mur, pousser en rotation. Isometrique, zero bruit.", rest: "60s", muscle: "Obliques, Hips" },
+  "landmine-rot": { name: "Russian Twist (lent)", sets: "3x12/cote", detail: "🏨 Assis au sol, pieds decolles, rotation lente. Valise/sac pour du poids.", rest: "60s", muscle: "Core, Obliques" },
+  "kb-swing": { name: "Glute Bridge March", sets: "3x12/jambe", detail: "🏨 Bridge, alterner jambes. Hanches hautes. Silencieux.", rest: "60s", muscle: "Post. Chain" },
+  "med-slam": { name: "Bear Crawl sur place", sets: "3x30s", detail: "🏨 Quadrupedie, genoux 2cm du sol, avancer/reculer 1m. Intense, zero bruit.", rest: "60s", muscle: "Full Body" },
 };
 
 const BW_COACH = {
@@ -342,26 +369,40 @@ export default function SCTracker() {
 
   // Variant selection: stored as var-{week}-{dayIdx}-{slotKey} = altId
   const varKey = (slotKey) => `var-${week}-${dayIdx}-${slotKey}`;
-  const getVar = (slotKey) => data[varKey(slotKey)] || null; // null = default exercise
+  const getVar = (slotKey) => data[varKey(slotKey)] || null;
   const setVar = (slotKey, altId) => save({ ...data, [varKey(slotKey)]: altId });
+  const bwVarKey = (slotKey) => `bwvar-${week}-${dayIdx}-${slotKey}`;
+  const getBwVar = (slotKey) => data[bwVarKey(slotKey)] || null;
+  const setBwVar = (slotKey, altId) => save({ ...data, [bwVarKey(slotKey)]: altId });
   // Finisher variant
   const finVarKey = () => `finvar-${week}-${dayIdx}`;
   const getFinVar = () => { const v = data[finVarKey()]; return v !== undefined && v !== null ? v : null; };
   const setFinVar = (idx) => save({ ...data, [finVarKey()]: idx });
 
   const resolveEx = (ex, slotKey) => {
+    // Normal mode: use regular variants
+    if (!travelMode) {
+      let resolved;
+      const selected = getVar(slotKey);
+      if (selected && ex.alts) {
+        const alt = ex.alts.find(a => a.id === selected);
+        if (alt) resolved = { ...alt, _slot: slotKey, _alts: ex.alts, _defaultId: ex.id, _default: ex };
+      }
+      if (!resolved) resolved = { ...ex, _slot: slotKey, _alts: ex.alts || [], _defaultId: ex.id, _default: ex };
+      return resolved;
+    }
+    // Travel mode: resolve to BW exercise, then check for BW variant selection
+    const baseId = ex.id;
+    const bwBase = BW_MAP[baseId];
+    if (!bwBase) return { ...ex, _slot: slotKey, _alts: [], _defaultId: ex.id, _default: ex, _isBw: true };
+    const bwAlts = bwBase.bwAlts || [];
+    const bwSelected = getBwVar(slotKey);
     let resolved;
-    const selected = getVar(slotKey);
-    if (selected && ex.alts) {
-      const alt = ex.alts.find(a => a.id === selected);
-      if (alt) resolved = { ...alt, _slot: slotKey, _alts: ex.alts, _defaultId: ex.id, _default: ex };
+    if (bwSelected && bwAlts.length > 0) {
+      const alt = bwAlts.find(a => a.id === bwSelected);
+      if (alt) resolved = { ...alt, _slot: slotKey, _alts: bwAlts, _defaultId: baseId, _default: ex, _isBw: true, _bwDefault: bwBase };
     }
-    if (!resolved) resolved = { ...ex, _slot: slotKey, _alts: ex.alts || [], _defaultId: ex.id, _default: ex };
-    // Apply bodyweight override in travel mode
-    if (travelMode && BW_MAP[resolved.id]) {
-      const bw = BW_MAP[resolved.id];
-      resolved = { ...resolved, ...bw, _isBw: true, _originalName: resolved.name };
-    }
+    if (!resolved) resolved = { ...ex, ...bwBase, _slot: slotKey, _alts: bwAlts, _defaultId: baseId, _default: ex, _isBw: true, _bwDefault: bwBase };
     return resolved;
   };
 
@@ -539,18 +580,29 @@ export default function SCTracker() {
                       {hasAlts && (
                         <div style={{ position: "relative" }}>
                           <button onClick={(e) => { e.stopPropagation(); setSwapSlot(swapSlot === slotKey ? null : slotKey); }}
-                            style={{ width: 26, height: 26, borderRadius: 7, background: "#F0FDF4", border: "none", cursor: "pointer", fontSize: 11 }}>🔄</button>
+                            style={{ width: 26, height: 26, borderRadius: 7, background: travelMode ? "#FEF3C7" : "#F0FDF4", border: "none", cursor: "pointer", fontSize: 11 }}>🔄</button>
                           {swapSlot === slotKey && (
                             <div onClick={e => e.stopPropagation()} style={{ position: "absolute", right: 0, top: 30, background: "#fff", borderRadius: 12, boxShadow: "0 4px 20px rgba(0,0,0,0.12)", padding: 6, zIndex: 50, minWidth: 200 }}>
-                              <div style={{ fontSize: 10, color: "#9CA3AF", fontFamily: f, padding: "4px 10px", fontWeight: 700, letterSpacing: 0.5 }}>VARIANTES</div>
-                              <div onClick={() => { setVar(slotKey, null); setSwapSlot(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: ex.id === rawEx.id ? 700 : 400, color: ex.id === rawEx.id ? phase.color : "#4B5563", background: ex.id === rawEx.id ? `${phase.color}10` : "transparent" }}>
-                                {rawEx.name} {rawEx.locked ? "🔒" : ""}
-                              </div>
-                              {rawEx.alts?.map(alt => (
-                                <div key={alt.id} onClick={() => { setVar(slotKey, alt.id); setSwapSlot(null); setOpenEx(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: ex.id === alt.id ? 700 : 400, color: ex.id === alt.id ? phase.color : "#4B5563", background: ex.id === alt.id ? `${phase.color}10` : "transparent" }}>
-                                  {alt.name}
+                              <div style={{ fontSize: 10, color: "#9CA3AF", fontFamily: f, padding: "4px 10px", fontWeight: 700, letterSpacing: 0.5 }}>{travelMode ? "🏨 VARIANTES HOTEL" : "VARIANTES"}</div>
+                              {travelMode ? (<>
+                                <div onClick={() => { setBwVar(slotKey, null); setSwapSlot(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: !getBwVar(slotKey) ? 700 : 400, color: !getBwVar(slotKey) ? phase.color : "#4B5563", background: !getBwVar(slotKey) ? `${phase.color}10` : "transparent" }}>
+                                  {ex._bwDefault?.name || ex.name}
                                 </div>
-                              ))}
+                                {ex._alts?.map(alt => (
+                                  <div key={alt.id} onClick={() => { setBwVar(slotKey, alt.id); setSwapSlot(null); setOpenEx(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: getBwVar(slotKey) === alt.id ? 700 : 400, color: getBwVar(slotKey) === alt.id ? phase.color : "#4B5563", background: getBwVar(slotKey) === alt.id ? `${phase.color}10` : "transparent" }}>
+                                    {alt.name}
+                                  </div>
+                                ))}
+                              </>) : (<>
+                                <div onClick={() => { setVar(slotKey, null); setSwapSlot(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: ex.id === rawEx.id ? 700 : 400, color: ex.id === rawEx.id ? phase.color : "#4B5563", background: ex.id === rawEx.id ? `${phase.color}10` : "transparent" }}>
+                                  {rawEx.name} {rawEx.locked ? "🔒" : ""}
+                                </div>
+                                {rawEx.alts?.map(alt => (
+                                  <div key={alt.id} onClick={() => { setVar(slotKey, alt.id); setSwapSlot(null); setOpenEx(null); }} style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontFamily: f, fontWeight: ex.id === alt.id ? 700 : 400, color: ex.id === alt.id ? phase.color : "#4B5563", background: ex.id === alt.id ? `${phase.color}10` : "transparent" }}>
+                                    {alt.name}
+                                  </div>
+                                ))}
+                              </>)}
                             </div>
                           )}
                         </div>
