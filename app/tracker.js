@@ -467,15 +467,17 @@ export default function SCTracker() {
   const renderSession = () => {
     const fin = getFin();
     const rFin = resolveFinisher(day.finisher);
-    // Global progress including finisher
-    let gTotal = 0, gDone = 0;
+    // Weighted progress: Mobility 15%, Force 70%, Finisher 15%
+    let mobTotal = 0, mobDone = 0, strTotal = 0, strDone = 0;
     day.sections.forEach(sec => sec.exercises.forEach(ex => {
       const resolved = resolveEx(ex, `${day.sections.indexOf(sec)}-${sec.exercises.indexOf(ex)}`);
-      if (sec.type === "mobility") { gTotal++; if (getMob(resolved.id).done) gDone++; }
-      else { const n = pSets(resolved.sets); gTotal += Math.max(n, 1); if (n > 0) getStr(resolved.id, n).sets.slice(0, n).forEach(s => { if (s.done) gDone++; }); }
+      if (sec.type === "mobility") { mobTotal++; if (getMob(resolved.id).done) mobDone++; }
+      else { const n = pSets(resolved.sets); strTotal += Math.max(n, 1); if (n > 0) getStr(resolved.id, n).sets.slice(0, n).forEach(s => { if (s.done) strDone++; }); }
     }));
-    gTotal++; if (fin.done) gDone++; // finisher counts
-    const globalPct = gTotal > 0 ? Math.round((gDone / gTotal) * 100) : 0;
+    const mobPct = mobTotal > 0 ? mobDone / mobTotal : 0;
+    const strPct = strTotal > 0 ? strDone / strTotal : 0;
+    const finPct = fin.done ? 1 : 0;
+    const globalPct = Math.round((mobPct * 15 + strPct * 70 + finPct * 15));
     return (
       <>
         {/* Quote */}
@@ -676,7 +678,7 @@ export default function SCTracker() {
         })}
 
         {/* Finisher */}
-        <div style={{ margin: "0 20px 12px", ...cd }}>
+        <div style={{ margin: "0 20px 12px", ...cd, border: fin.done ? `2px solid ${phase.color}` : "none" }}>
           {/* Header - always visible */}
           <div onClick={() => toggleSec(`fin-${dayIdx}`)} style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -775,15 +777,18 @@ export default function SCTracker() {
   const renderProgress = () => {
     const wd = [];
     for (let w = 1; w <= 12; w++) {
-      let t = 0, d = 0;
+      let weekPct = 0;
       DAYS.forEach((dy, di) => {
+        let mt = 0, md = 0, st = 0, sd = 0;
         dy.sections.forEach(sec => sec.exercises.forEach(ex => {
-          if (sec.type === "mobility") { t++; if (data[ky(w,di,ex.id)]?.done) d++; }
-          else { const n = pSets(ex.sets); t += Math.max(n,1); const e = data[ky(w,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) d++; }); }
+          if (sec.type === "mobility") { mt++; if (data[ky(w,di,ex.id)]?.done) md++; }
+          else { const n = pSets(ex.sets); st += Math.max(n,1); const e = data[ky(w,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) sd++; }); }
         }));
-        t++; const finData = data[`fin-${w}-${di}`]; if (finData?.done) d++;
+        const fd = data[`fin-${w}-${di}`]?.done ? 1 : 0;
+        const dayPct = (mt > 0 ? md/mt : 0) * 15 + (st > 0 ? sd/st : 0) * 70 + fd * 15;
+        weekPct += dayPct;
       });
-      wd.push({ week: w, pct: t > 0 ? Math.round((d/t)*100) : 0 });
+      wd.push({ week: w, pct: Math.round(weekPct / 3) });
     }
     return (
       <div style={{ padding: "0 20px 20px" }}>
@@ -802,13 +807,13 @@ export default function SCTracker() {
         <div style={{ ...cd, padding: 18 }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: "#1F2937", fontFamily: f, marginBottom: 12 }}>Semaine {week}</div>
           {DAYS.map((dy, di) => {
-            let t = 0, d = 0;
+            let mt = 0, md = 0, st = 0, sd = 0;
             dy.sections.forEach(sec => sec.exercises.forEach(ex => {
-              if (sec.type === "mobility") { t++; if (data[ky(week,di,ex.id)]?.done) d++; }
-              else { const n = pSets(ex.sets); t += Math.max(n,1); const e = data[ky(week,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) d++; }); }
+              if (sec.type === "mobility") { mt++; if (data[ky(week,di,ex.id)]?.done) md++; }
+              else { const n = pSets(ex.sets); st += Math.max(n,1); const e = data[ky(week,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) sd++; }); }
             }));
-            t++; const finData = data[`fin-${week}-${di}`]; if (finData?.done) d++;
-            const pct = t > 0 ? Math.round((d/t)*100) : 0;
+            const fd = data[`fin-${week}-${di}`]?.done ? 1 : 0;
+            const pct = Math.round((mt > 0 ? md/mt : 0) * 15 + (st > 0 ? sd/st : 0) * 70 + fd * 15);
             return (
               <div key={di} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderTop: di > 0 ? "1px solid #F3F4F6" : "none" }}>
                 <span style={{ fontSize: 13, color: "#4B5563", fontFamily: f }}>{dy.emoji} {dy.sub}</span>
@@ -821,45 +826,60 @@ export default function SCTracker() {
           })}
         </div>
 
-        {/* CNS Recovery */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ ...cd }}>
-            <div onClick={() => toggleSec("cns-recovery")} style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
-              <span style={{ fontSize: 14, fontWeight: 700, color: "#1F2937", fontFamily: f }}>⚡ Recharge Systeme Nerveux</span>
-              <span style={{ fontSize: 12, color: "#D1D5DB" }}>{secIsOpen("cns-recovery") ? "▲" : "▼"}</span>
-            </div>
-            {secIsOpen("cns-recovery") && (
-              <div style={{ padding: "0 16px 16px" }}>
-                <div style={{ fontSize: 12, color: "#6B7280", fontFamily: f, lineHeight: 1.7 }}>
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SPRINTS COURTS (avant les lifts)</div>
-                    <div>3-4 sprints de 10-20m a intensite max apres l'echauffement general. Post-activation potentiation : reveille le CNS avant les charges lourdes. Ferreira recommande ca comme premier exercice de chaque seance.</div>
-                  </div>
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>RESPIRATION BOX BREATHING (post-training)</div>
-                    <div>4s inspire par le nez, 4s hold poumons pleins, 4s expire par la bouche, 4s hold poumons vides. 5 minutes. Active le systeme parasympathique immediatement. A faire dans les 10 minutes apres la seance.</div>
-                  </div>
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>CONTRASTE CHAUD/FROID (jours off)</div>
-                    <div>2 min eau chaude, 30s eau froide, x3-4 cycles. Finir par le froid. Joel Jamieson prescrit ca pour la recuperation parasympathique. Douche suffit, pas besoin de bain de glace.</div>
-                  </div>
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>ECHAUFFEMENT TEMPO (2 premieres series)</div>
-                    <div>Les 2 premieres series de chaque lift principal a 50-60% du poids de travail avec tempo 3-1-3-0. Ca recharge le CNS mieux qu'un echauffement rapide. Le systeme nerveux a besoin de se "calibrer" sur le pattern avant d'aller lourd.</div>
-                  </div>
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SOMMEIL = PRIORITE #1</div>
-                    <div>Le CNS se repare pendant le sommeil profond. 7h minimum, 8h+ ideal. Pas d'ecran 30 min avant. Si ta HRV (variabilite cardiaque) baisse 2 jours de suite, le CNS est fatigue : reduis l'intensite ce jour-la.</div>
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SIGNES DE FATIGUE CNS</div>
-                    <div>Grip qui lache avant les muscles, temps de reaction plus lent, premiere rep d'un lift qui "colle", motivation basse malgre un bon sommeil. Si 2+ signes : journee decharge, mobilite + tempo lent a 60%.</div>
+        {/* CNS Recovery - Daily Checklist */}
+        {(() => {
+          const today = new Date().toISOString().slice(0, 10);
+          const cnsKey = `cns-${today}`;
+          const cnsData = data[cnsKey] || {};
+          const cnsItems = [
+            { id: "sprint", label: "Sprints 10-20m", detail: "3-4 sprints max avant les lifts. Post-activation potentiation.", icon: "🏃" },
+            { id: "breath", label: "Box Breathing 5 min", detail: "4s inspire, 4s hold, 4s expire, 4s hold. Post-training.", icon: "🫁" },
+            { id: "contrast", label: "Contraste chaud/froid", detail: "2 min chaud, 30s froid, x3-4 cycles. Finir par le froid.", icon: "🚿" },
+            { id: "warmup", label: "Echauffement tempo", detail: "2 series a 50-60% en 3-1-3-0 avant chaque lift principal.", icon: "🔥" },
+            { id: "sleep", label: "7h+ de sommeil", detail: "Pas d'ecran 30 min avant. CNS se repare en sommeil profond.", icon: "😴" },
+            { id: "hrv", label: "Check HRV / sensations", detail: "Grip lache, 1ere rep colle, motivation basse = jour decharge.", icon: "📊" },
+          ];
+          const cnsDone = cnsItems.filter(i => cnsData[i.id]).length;
+          const cnsPct = Math.round((cnsDone / cnsItems.length) * 100);
+          const toggleCns = (id) => {
+            const cur = data[cnsKey] || {};
+            save({ ...data, [cnsKey]: { ...cur, [id]: !cur[id] } });
+          };
+          return (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ ...cd, border: cnsPct === 100 ? `2px solid ${phase.color}` : "none" }}>
+                <div onClick={() => toggleSec("cns-recovery")} style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: cnsPct === 100 ? phase.color : "#1F2937", fontFamily: f }}>
+                    {cnsPct === 100 ? "✅" : "⚡"} Recharge CNS
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: cnsPct > 0 ? phase.color : "#9CA3AF", fontFamily: f }}>{cnsDone}/{cnsItems.length}</span>
+                    <span style={{ fontSize: 12, color: "#D1D5DB" }}>{secIsOpen("cns-recovery") ? "▲" : "▼"}</span>
                   </div>
                 </div>
+                {secIsOpen("cns-recovery") && (
+                  <div style={{ padding: "0 16px 12px" }}>
+                    <div style={{ fontSize: 10, color: "#9CA3AF", fontFamily: f, marginBottom: 8 }}>Checklist du jour ({today})</div>
+                    {cnsItems.map(item => (
+                      <div key={item.id} onClick={() => toggleCns(item.id)} style={{ display: "flex", gap: 10, alignItems: "center", padding: "8px 0", borderTop: "1px solid #F3F4F6", cursor: "pointer" }}>
+                        <div style={{
+                          width: 22, height: 22, borderRadius: 7, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                          background: cnsData[item.id] ? phase.color : "#fff", border: cnsData[item.id] ? `2px solid ${phase.color}` : "2px solid #D1D5DB",
+                        }}>{cnsData[item.id] && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: cnsData[item.id] ? "#9CA3AF" : "#1F2937", fontFamily: f, textDecoration: cnsData[item.id] ? "line-through" : "none" }}>
+                            {item.icon} {item.label}
+                          </div>
+                          <div style={{ fontSize: 11, color: "#9CA3AF", fontFamily: f }}>{item.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          );
+        })()}
 
         <div style={{ textAlign: "center", marginTop: 20 }}>
           {!resetOpen ? (
