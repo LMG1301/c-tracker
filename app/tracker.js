@@ -128,11 +128,11 @@ const DAYS = [
       ]},
     ],
     finisher: {
-      name: "Rowing Intervals", description: "5 x 500m rameur, 90s repos.", alt: "Alt : Pyramide 100>500>100m", duration: 900,
+      name: "5x500m Row", description: "5 x 500m rameur, 90s repos. Viser la regularite des splits.", duration: 900,
       scoreType: "splits", splits: 5, splitLabel: "500m",
       alts: [
-        { name: "Grappling Scramble Drill", description: "AMRAP 6 min : 5 Sprawls + 5 Sit-outs + 5 Turkish Get-ups (leger). Simule les transitions au sol.", duration: 360, scoreType: "rounds_reps" },
-        { name: "Takedown Conditioning", description: "EMOM 10 min : Min impaire 3 Double-leg shots (sans partenaire, explosif) + 3 Sprawls. Min paire 6 KB Swings + 6 Box Jumps.", duration: 600, scoreType: "rounds_reps" },
+        { name: "Cindy", description: "AMRAP 20 min : 5 Pull-ups + 10 Push-ups + 15 Air Squats. Le classique CrossFit, cardio + endurance musculaire.", duration: 1200, scoreType: "rounds_reps" },
+        { name: "Death by Thrusters", description: "EMOM : Min 1 = 1 Thruster, Min 2 = 2 Thrusters... jusqu'a echec. Barre legere (40-50kg).", duration: 900, scoreType: "totalreps" },
       ]
     },
   },
@@ -174,11 +174,11 @@ const DAYS = [
       ]},
     ],
     finisher: {
-      name: "EMOM 15 min", description: "Min 1: 10 KB Swings | Min 2: 8 Push-ups + 4 Sprawls | Min 3: 12 cal rameur. x5.", alt: "+1-2 reps/sem", duration: 900,
+      name: "EMOM 15 min", description: "Min 1: 10 KB Swings (16kg) | Min 2: 8 Push-ups + 4 Sprawls | Min 3: 12 cal rameur. x5 rounds.", duration: 900,
       scoreType: "rounds_reps", 
       alts: [
-        { name: "Grip & Control Circuit", description: "AMRAP 8 min : 30s Dead Hang + 5 Towel Pull-ups + 10 Ring Rows + 5 Farmer's Walk 20m. No-gi grip endurance.", duration: 480, scoreType: "rounds_reps" },
-        { name: "Clinch Power EMOM", description: "EMOM 12 min : Min 1: 8 Landmine Press /bras. Min 2: 6 Chin-ups tempo 3s excentrique. Min 3: 10 Med Ball Rotational Throws.", duration: 720, scoreType: "rounds_reps" },
+        { name: "Fran (scaled)", description: "21-15-9 : Thrusters (40kg) + Pull-ups. For time. Le benchmark CrossFit par excellence.", duration: 600, scoreType: "splits", splits: 1, splitLabel: "Temps" },
+        { name: "Grip & Grind", description: "AMRAP 12 min : 5 Deadlifts (70kg) + 10 KB Swings + 15 cal Row + 30s Dead Hang. Grip endurance pour le grappling.", duration: 720, scoreType: "rounds_reps" },
       ]
     },
   },
@@ -214,11 +214,11 @@ const DAYS = [
       ]},
     ],
     finisher: {
-      name: "Grappling Round Sim", description: "3 rounds 6 min, 1 min repos. 60s/station en continu : Sprawl-to-Shot > Bear Crawl 10m > KB Swing > Sit-outs > Burpee-to-Guard Pull. Simule No-Gi comp.", alt: "Score : total reps par round.", duration: 1140,
+      name: "Fight Gone Bad", description: "3 rounds, 1 min/station, 1 min repos entre rounds : Wall Ball + Sumo DL High Pull + Box Jump + Push Press + Cal Row. Score = total reps.", duration: 1020,
       scoreType: "splits", splits: 3, splitLabel: "Round",
       alts: [
-        { name: "Scramble AMRAP", description: "AMRAP 8 min : 2 Turkish Get-ups + 4 Sprawls + 6 Sit-outs + 8 KB Swings. Enchaine sans pause. Transitions rapides.", duration: 480, scoreType: "rounds_reps" },
-        { name: "Comp Simulation", description: "4 rounds 6 min, 90s repos (simule un bracket de 4 matches). Chaque round : 30s Assault Bike sprint > 30s Sprawl+Shot > 30s Bear Crawl > 30s Rest. Repeat 3x dans le round.", duration: 1800, scoreType: "splits", splits: 4, splitLabel: "Match" },
+        { name: "DT", description: "5 rounds for time : 12 Deadlifts (60kg) + 9 Hang Cleans + 6 Push Jerks. Meme barre, pas de lacher.", duration: 720, scoreType: "splits", splits: 1, splitLabel: "Temps" },
+        { name: "Sprawl & Brawl WOD", description: "AMRAP 15 min : 5 Power Cleans (50kg) + 10 Burpees-over-bar + 15 KB Swings + 20 cal Row. Grappling cardio en format CrossFit.", duration: 900, scoreType: "rounds_reps" },
       ]
     },
   },
@@ -467,6 +467,15 @@ export default function SCTracker() {
   const renderSession = () => {
     const fin = getFin();
     const rFin = resolveFinisher(day.finisher);
+    // Global progress including finisher
+    let gTotal = 0, gDone = 0;
+    day.sections.forEach(sec => sec.exercises.forEach(ex => {
+      const resolved = resolveEx(ex, `${day.sections.indexOf(sec)}-${sec.exercises.indexOf(ex)}`);
+      if (sec.type === "mobility") { gTotal++; if (getMob(resolved.id).done) gDone++; }
+      else { const n = pSets(resolved.sets); gTotal += Math.max(n, 1); if (n > 0) getStr(resolved.id, n).sets.slice(0, n).forEach(s => { if (s.done) gDone++; }); }
+    }));
+    gTotal++; if (fin.done) gDone++; // finisher counts
+    const globalPct = gTotal > 0 ? Math.round((gDone / gTotal) * 100) : 0;
     return (
       <>
         {/* Quote */}
@@ -479,6 +488,14 @@ export default function SCTracker() {
               <button onClick={() => setQi(i => (i+1)%QUOTES.length)} style={{ border: "1px solid #E5E7EB", background: "#fff", borderRadius: 6, width: 26, height: 26, cursor: "pointer", color: "#9CA3AF", fontSize: 13 }}>→</button>
             </div>
           </div>
+        </div>
+
+        {/* Global progress */}
+        <div style={{ margin: "0 20px 12px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ flex: 1, height: 6, background: "#E5E7EB", borderRadius: 3, overflow: "hidden" }}>
+            <div style={{ width: `${globalPct}%`, height: "100%", background: globalPct === 100 ? "#22C55E" : phase.color, borderRadius: 3, transition: "width 0.4s" }} />
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 700, color: globalPct === 100 ? "#22C55E" : "#9CA3AF", fontFamily: f }}>{globalPct === 100 ? "✅" : `${globalPct}%`}</span>
         </div>
 
         {/* Sections */}
@@ -575,6 +592,7 @@ export default function SCTracker() {
                           {rawEx.locked && <span style={{ fontSize: 8, color: "#9CA3AF" }}>🔒</span>}
                         </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", fontFamily: f }}>{ex.sets} | {ex.muscle}</div>
+                        <div style={{ fontSize: 10, color: "#B0B8C1", fontFamily: f }}>{ex.detail}</div>
                       </div>
                       {n > 0 && <div style={{ display: "flex", gap: 3 }}>{Array.from({ length: n }, (_, i) => <div key={i} style={{ width: 7, height: 7, borderRadius: 4, background: exData.sets[i]?.done ? phase.color : "#E5E7EB" }} />)}</div>}
                       {hasAlts && (
@@ -758,10 +776,13 @@ export default function SCTracker() {
     const wd = [];
     for (let w = 1; w <= 12; w++) {
       let t = 0, d = 0;
-      DAYS.forEach((dy, di) => dy.sections.forEach(sec => sec.exercises.forEach(ex => {
-        if (sec.type === "mobility") { t++; if (data[ky(w,di,ex.id)]?.done) d++; }
-        else { const n = pSets(ex.sets); t += Math.max(n,1); const e = data[ky(w,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) d++; }); }
-      })));
+      DAYS.forEach((dy, di) => {
+        dy.sections.forEach(sec => sec.exercises.forEach(ex => {
+          if (sec.type === "mobility") { t++; if (data[ky(w,di,ex.id)]?.done) d++; }
+          else { const n = pSets(ex.sets); t += Math.max(n,1); const e = data[ky(w,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) d++; }); }
+        }));
+        t++; const finData = data[`fin-${w}-${di}`]; if (finData?.done) d++;
+      });
       wd.push({ week: w, pct: t > 0 ? Math.round((d/t)*100) : 0 });
     }
     return (
@@ -786,6 +807,7 @@ export default function SCTracker() {
               if (sec.type === "mobility") { t++; if (data[ky(week,di,ex.id)]?.done) d++; }
               else { const n = pSets(ex.sets); t += Math.max(n,1); const e = data[ky(week,di,ex.id)]; if (e?.sets) e.sets.slice(0,n).forEach(s => { if (s.done) d++; }); }
             }));
+            t++; const finData = data[`fin-${week}-${di}`]; if (finData?.done) d++;
             const pct = t > 0 ? Math.round((d/t)*100) : 0;
             return (
               <div key={di} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderTop: di > 0 ? "1px solid #F3F4F6" : "none" }}>
@@ -798,6 +820,47 @@ export default function SCTracker() {
             );
           })}
         </div>
+
+        {/* CNS Recovery */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ ...cd }}>
+            <div onClick={() => toggleSec("cns-recovery")} style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: "#1F2937", fontFamily: f }}>⚡ Recharge Systeme Nerveux</span>
+              <span style={{ fontSize: 12, color: "#D1D5DB" }}>{secIsOpen("cns-recovery") ? "▲" : "▼"}</span>
+            </div>
+            {secIsOpen("cns-recovery") && (
+              <div style={{ padding: "0 16px 16px" }}>
+                <div style={{ fontSize: 12, color: "#6B7280", fontFamily: f, lineHeight: 1.7 }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SPRINTS COURTS (avant les lifts)</div>
+                    <div>3-4 sprints de 10-20m a intensite max apres l'echauffement general. Post-activation potentiation : reveille le CNS avant les charges lourdes. Ferreira recommande ca comme premier exercice de chaque seance.</div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>RESPIRATION BOX BREATHING (post-training)</div>
+                    <div>4s inspire par le nez, 4s hold poumons pleins, 4s expire par la bouche, 4s hold poumons vides. 5 minutes. Active le systeme parasympathique immediatement. A faire dans les 10 minutes apres la seance.</div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>CONTRASTE CHAUD/FROID (jours off)</div>
+                    <div>2 min eau chaude, 30s eau froide, x3-4 cycles. Finir par le froid. Joel Jamieson prescrit ca pour la recuperation parasympathique. Douche suffit, pas besoin de bain de glace.</div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>ECHAUFFEMENT TEMPO (2 premieres series)</div>
+                    <div>Les 2 premieres series de chaque lift principal a 50-60% du poids de travail avec tempo 3-1-3-0. Ca recharge le CNS mieux qu'un echauffement rapide. Le systeme nerveux a besoin de se "calibrer" sur le pattern avant d'aller lourd.</div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SOMMEIL = PRIORITE #1</div>
+                    <div>Le CNS se repare pendant le sommeil profond. 7h minimum, 8h+ ideal. Pas d'ecran 30 min avant. Si ta HRV (variabilite cardiaque) baisse 2 jours de suite, le CNS est fatigue : reduis l'intensite ce jour-la.</div>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, color: phase.color, fontSize: 11, letterSpacing: 0.5, marginBottom: 4 }}>SIGNES DE FATIGUE CNS</div>
+                    <div>Grip qui lache avant les muscles, temps de reaction plus lent, premiere rep d'un lift qui "colle", motivation basse malgre un bon sommeil. Si 2+ signes : journee decharge, mobilite + tempo lent a 60%.</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
         <div style={{ textAlign: "center", marginTop: 20 }}>
           {!resetOpen ? (
             <button onClick={() => setResetOpen(true)} style={{ padding: "8px 20px", borderRadius: 10, border: "1px solid #FCA5A5", background: "#FEF2F2", color: "#EF4444", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: f }}>Reset donnees</button>
