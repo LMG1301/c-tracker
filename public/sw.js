@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sc-tracker-v10';
+const CACHE_NAME = 'sc-tracker-v11';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
