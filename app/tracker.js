@@ -342,9 +342,9 @@ const BW_VIDEOS = {
 };
 
 export default function SCTracker() {
-  const [week, setWeek] = useState(() => { try { return parseInt(localStorage.getItem("sc-week")) || 1; } catch { return 1; } });
-  const [dayIdx, setDayIdx] = useState(() => { try { return parseInt(localStorage.getItem("sc-day")) || 0; } catch { return 0; } });
-  const [tab, setTab] = useState(() => { try { return localStorage.getItem("sc-tab") || "session"; } catch { return "session"; } });
+  const [week, setWeek] = useState(1);
+  const [dayIdx, setDayIdx] = useState(0);
+  const [tab, setTab] = useState("session");
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [qi, setQi] = useState(Math.floor(Math.random() * QUOTES.length));
@@ -359,11 +359,17 @@ export default function SCTracker() {
   const [timerLabel, setTimerLabel] = useState("");
   const tRef = useRef(null);
 
-  useEffect(() => { try { const r = localStorage.getItem(SK); if (r) setData(JSON.parse(r)); } catch {} setLoading(false); }, []);
+  useEffect(() => {
+    try { const r = localStorage.getItem(SK); if (r) setData(JSON.parse(r)); } catch {}
+    try { const w = localStorage.getItem("sc-week"); if (w) setWeek(parseInt(w)); } catch {}
+    try { const d = localStorage.getItem("sc-day"); if (d) setDayIdx(parseInt(d)); } catch {}
+    try { const t = localStorage.getItem("sc-tab"); if (t) setTab(t); } catch {}
+    setLoading(false);
+  }, []);
   const save = useCallback((nd) => { setData(nd); try { localStorage.setItem(SK, JSON.stringify(nd)); } catch {} }, []);
-  useEffect(() => { try { localStorage.setItem("sc-week", week); } catch {} }, [week]);
-  useEffect(() => { try { localStorage.setItem("sc-day", dayIdx); } catch {} }, [dayIdx]);
-  useEffect(() => { try { localStorage.setItem("sc-tab", tab); } catch {} }, [tab]);
+  useEffect(() => { if (!loading) { try { localStorage.setItem("sc-week", week); } catch {} } }, [week, loading]);
+  useEffect(() => { if (!loading) { try { localStorage.setItem("sc-day", dayIdx); } catch {} } }, [dayIdx, loading]);
+  useEffect(() => { if (!loading) { try { localStorage.setItem("sc-tab", tab); } catch {} } }, [tab, loading]);
 
   useEffect(() => {
     if (timer !== null && timerVal > 0) {
