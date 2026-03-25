@@ -7,7 +7,7 @@ const V = {
   "hip-cars": YT("hip CARs quadruped mobility squat university"), "90-90": YT("90 90 hip switches mobility"), "wgs": YT("world's greatest stretch"), "cossack": YT("cossack squat mobility"), "wall-ankle": YT("wall ankle mobilization"), "deep-squat": YT("deep squat hold"),
   "shoulder-cars": YT("shoulder CARs"), "thread-needle": YT("thread the needle thoracic"), "cat-cow": YT("cat cow spinal"), "band-pull": YT("band pull apart jeff nippard"), "prone-swim": YT("prone swimmer lower trap"), "scap-pushup": YT("scapular push up"), "scorpion": YT("scorpion stretch"),
   "ankle-cars": YT("ankle CARs"), "tspine-rot": YT("thoracic rotation"), "kb-halo": YT("kettlebell halo"), "sl-bridge": YT("single leg glute bridge"),
-  "broad-jump": YT("broad jump explosive phil daru"), "squat-pause": YT("pause back squat squat university"), "bss": YT("bulgarian split squat jeff nippard"), "sl-rdl": YT("single leg romanian deadlift"), "pallof": YT("pallof press phil daru"),
+  "broad-jump": YT("broad jump explosive phil daru"), "squat-pause": YT("front squat heel elevated squat university"), "goblet-squat-he": YT("heel elevated goblet squat quad focus"), "sissy-squat": YT("sissy squat assisted tutorial progression"), "bss": YT("bulgarian split squat jeff nippard"), "sl-rdl": YT("single leg romanian deadlift"), "pallof": YT("pallof press phil daru"),
   "plyo-push": YT("plyometric push up explosive"), "bench-pause": YT("pause bench press jeff nippard"), "pullup": YT("weighted pull up jeff nippard"), "towel-pullup": YT("towel pull up grip strength grappling"), "ohp": YT("overhead press strict jeff nippard"), "pendlay": YT("pendlay row explosive"), "mech-drop": YT("mechanical drop set pull ups"), "face-pull": YT("face pull jeff nippard"), "woodchop": YT("cable woodchop low to high"),
   "clean": YT("hang power clean crossfit"), "deadlift": YT("conventional deadlift cluster sets"), "box-jump": YT("box jump crossfit"), "floor-press": YT("floor press barbell"), "chinup": YT("chin up eccentric"), "kb-rot-swing": YT("kettlebell rotational swing"), "landmine-rot": YT("landmine rotation barbell"),
   // Variant videos
@@ -19,7 +19,9 @@ const V = {
 
 const COACH = {
   "broad-jump": { why: "Puissance horizontale : double-legs et closing de distance.", how: "Triple extension explosive, bras en arriere, atterrir soft, reset complet.", focus: "Intent maximal. Si la distance baisse, la serie est finie.", icon: "💥" },
-  "squat-pause": { why: "La pause elimine le stretch-shortening cycle. Force depuis un dead stop, transferable aux scrambles.", how: "Descente 3s, pause 2s en bas, explosion. Profondeur max, dos droit.", focus: "Tension dans la pause. Pousser le sol, pas la barre.", icon: "🏋️" },
+  "squat-pause": { why: "Le front squat talons sureleves est le meilleur mouvement quad pour les longs femurs. La charge frontale force un torse vertical, les talons sureleves augmentent la flexion du genou. Zero stress sur le bas du dos.", how: "Talons sur plaque de 2-3cm ou chaussures d'halterophilie. Barre en front rack (doigts sous la barre, coudes hauts). Descente 3s, pause 1s en bas, remonter explosif. Profondeur max.", focus: "Coudes HAUTS tout le mouvement. Les genoux vont loin devant, c'est normal et voulu. Pousser le sol avec le milieu du pied.", icon: "🏋️" },
+  "goblet-squat-he": { why: "Le goblet squat talons sureleves est la version la plus safe pour les quads. La charge frontale + elevation des talons = torse droit + genoux avances. Zero risque pour le dos.", how: "DB ou KB au niveau de la poitrine, talons sur plaque 2-3cm. Descendre profond, coudes entre les genoux. Tempo 3-1-X-0.", focus: "Garder le poids colle a la poitrine. Les coudes poussent les genoux vers l'exterieur en bas.", icon: "🏋️" },
+  "sissy-squat": { why: "Isole les quads a un degre impossible avec un squat classique. Etire et charge le rectus femoris en position allongee. Renforce aussi les tendons du genou.", how: "Debout, main sur le rack ou mur. Reculer les genoux en avant, pencher le torse en arriere. Les genoux vont tres loin devant, c'est voulu. Descente controlee.", focus: "Le mouvement vient des genoux, pas des hanches. Si trop dur : reduire l'amplitude. Progresser en profondeur semaine apres semaine.", icon: "🔥" },
   "bss": { why: "Double la charge par jambe. Corrige les asymetries du combat.", how: "Pied sureleve, descente 3s, genou frole le sol, drive explosif. DBs le long du corps.", focus: "80% du poids jambe avant. Genou track au-dessus du pied.", icon: "🦵" },
   "walking-lunge": { why: "Alternative au BSS : plus dynamique, travaille la deceleration et le changement de direction.", how: "Pas long, genou arriere frole le sol, drive du talon avant. DBs le long du corps.", focus: "Torse droit, pas d'inclinaison laterale. Controler la descente.", icon: "🦵" },
   "step-up": { why: "Force unilaterale concentrique pure, sans phase excentrique assistee.", how: "Box 40-50cm, pied complet dessus, drive du talon, controler la descente.", focus: "Ne pas pousser avec le pied du bas. Toute la force vient de la jambe haute.", icon: "🦵" },
@@ -112,7 +114,10 @@ const DAYS = [
       ]},
       { name: "Force & Explosivite", duration: "35 min", type: "strength", exercises: [
         { id: "broad-jump", name: "Broad Jumps", sets: "4x5", detail: "Intent max, extension complete", rest: "90s", muscle: "Full Body", locked: true },
-        { id: "squat-pause", name: "Back Squat (pause)", sets: "4x4", detail: "Tempo 3/2/X/0, ~85-95kg", rest: "2.5 min", muscle: "Quads, Glutes", locked: true },
+        { id: "squat-pause", name: "Front Squat (heel-elevated)", sets: "4x4", detail: "Tempo 3/1/X/0, talons +2cm, ~60-75kg", rest: "2.5 min", muscle: "Quads, Glutes", locked: true, alts: [
+          { id: "goblet-squat-he", name: "Goblet Squat (heel-elevated)", sets: "4x8", detail: "DB/KB 20-25kg, talons +2cm, tempo 3-1-X-0, profond", rest: "2 min", muscle: "Quads, Glutes" },
+          { id: "sissy-squat", name: "Sissy Squat (assist)", sets: "4x6", detail: "Tenir le rack, genoux loin devant, torse incline en arriere. Quad killer.", rest: "90s", muscle: "Quads" },
+        ]},
         { id: "bss", name: "Bulgarian Split Squat (DB)", sets: "3x6", detail: "Tempo 3/1/X/0, 15kg DBs, /jambe", rest: "90s", muscle: "Quads, Glutes", alts: [
           { id: "walking-lunge", name: "Walking Lunges (DB)", sets: "3x8", detail: "Pas long, genou frole le sol, /jambe", rest: "90s", muscle: "Quads, Glutes" },
           { id: "step-up", name: "Step-ups (DB/BB)", sets: "3x6", detail: "Box 40-50cm, drive du talon, /jambe", rest: "90s", muscle: "Quads, Glutes" },
@@ -237,6 +242,8 @@ const BW_MAP = {
     { id: "bw-wall-sit", name: "Wall Sit", sets: "4x45s", detail: "🏨 Dos au mur, cuisses paralleles. Hold. Ajouter 1 jambe pour augmenter.", rest: "90s", muscle: "Quads" },
     { id: "bw-sissy-squat", name: "Sissy Squat (assist)", sets: "4x6", detail: "🏨 Tenir le mur, reculer les genoux, torse incline en arriere. Quad killer.", rest: "2 min", muscle: "Quads" },
   ]},
+  "goblet-squat-he": { name: "Goblet Squat BW (sac a dos)", sets: "4x8", detail: "🏨 Sac a dos rempli contre la poitrine + talons sureleves sur un livre. Tempo 3-1-X-0.", rest: "2 min", muscle: "Quads, Glutes" },
+  "sissy-squat": { name: "Sissy Squat (mur)", sets: "4x6", detail: "🏨 Main sur le mur, genoux loin devant, torse en arriere. Identique a la salle.", rest: "90s", muscle: "Quads" },
   "bss": { name: "Shrimp Squat", sets: "3x6/jambe", detail: "🏨 Attraper le pied arriere, descente controlee genou au sol.", rest: "90s", muscle: "Quads, Glutes", bwAlts: [
     { id: "bw-skater-squat", name: "Skater Squat", sets: "3x6/jambe", detail: "🏨 Comme un shrimp mais bras devant pour l'equilibre, jambe arriere libre.", rest: "90s", muscle: "Quads, Glutes" },
   ]},
@@ -298,7 +305,7 @@ const BW_MAP = {
 };
 
 const BW_COACH = {
-  "squat-pause": { why: "Le pistol squat assiste construit la meme force unilaterale que le back squat, avec zero equipement. La pause en bas reproduit le dead stop.", how: "Main sur le mur ou une chaise stable. Descendre sur une jambe 3s, pause 2s en bas, remonter sans tirer avec le bras. L'autre jambe reste tendue devant.", focus: "Le bras sert d'equilibre, pas de force. Toute la puissance vient de la jambe. Talon au sol.", icon: "🏨" },
+  "squat-pause": { why: "Le pistol squat assiste construit la meme force unilaterale que le front squat, avec zero equipement. La pause en bas reproduit le dead stop.", how: "Main sur le mur ou une chaise stable. Descendre sur une jambe 3s, pause 2s en bas, remonter sans tirer avec le bras. L'autre jambe reste tendue devant.", focus: "Le bras sert d'equilibre, pas de force. Toute la puissance vient de la jambe. Talon au sol.", icon: "🏨" },
   "bss": { why: "Le shrimp squat est le BSS sans banc. Meme pattern unilateral, meme profondeur, faisable dans 1m2.", how: "Debout, attraper le pied arriere avec la main. Descendre en controle jusqu'a ce que le genou touche le sol. Remonter sans lacher le pied.", focus: "Garder le torse droit. Si trop dur : lacher le pied et faire un reverse lunge lent.", icon: "🏨" },
   "sl-rdl": { why: "Le glute bridge unilateral isole les ischios et fessiers sans bruit d'impact. Le lit sert de surface surelevee pour augmenter le range.", how: "Dos au sol, pieds sur le bord du lit. Lever une jambe, pousser avec l'autre pour soulever les hanches. Hold 2s en haut.", focus: "Serrer le fessier en haut. Ne pas cambrer le dos. Controler la descente.", icon: "🏨" },
   "bench-pause": { why: "L'archer push-up est l'exercice de poussee unilateral le plus dur en bodyweight. Equivalent a un bench a ~70% du poids du corps sur un bras.", how: "Position push-up large. Descendre vers un bras en gardant l'autre tendu sur le cote. Pause 1s en bas, pousser explosif.", focus: "Le coude du bras qui travaille reste a 45deg. L'autre bras ne pousse pas, il glisse juste.", icon: "🏨" },
